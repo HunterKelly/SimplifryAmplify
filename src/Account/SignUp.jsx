@@ -4,7 +4,7 @@ import PreLoginNav from "../Navigation/PreLoginNav";
 import React, { useState } from 'react';
 import { generateClient } from 'aws-amplify/data';
 import { DataStore } from '@aws-amplify/datastore';
-import { schema } from './models';
+import { Users } from '../models';
 const SignUp = () => {
     const navigate = useNavigate();
     const client = generateClient();
@@ -32,7 +32,7 @@ const SignUp = () => {
         e.preventDefault();
         try {
             await DataStore.save(
-                new schema({
+                new Users({
                     ...formData
                     
                 })
