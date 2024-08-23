@@ -13,9 +13,20 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.guest()]),
 });
-
+const users = a.schema({
+  Users: a
+    .model({
+      customerid: a.id().required(),
+      firstname: a.string().required(),
+      lastname: a.string().required(),
+      emailaddress: a.string().required(),
+      password: a.string().required(),
+      role: a.string().required()
+    })
+    .authorization((allow) => [allow.guest()]),
+});
 export type Schema = ClientSchema<typeof schema>;
-
+export type Users = ClientSchema<typeof users>;
 export const data = defineData({
   schema,
   authorizationModes: {

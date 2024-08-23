@@ -1,38 +1,46 @@
-
 import { useNavigate } from "react-router-dom";
 import '../MasterStyles.css';
 import PreLoginNav from "../Navigation/PreLoginNav";
 import React, { useState } from 'react';
+import { generateClient } from 'aws-amplify/data';
 
 const SignUp = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');    
-    const [role, setRole] = useState('customer');
     const navigate = useNavigate();
+    const client = generateClient();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const data = { firstName, lastName, email, password, role };
+    // State to store form input values
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: ''
+    });
 
-        fetch("http://localhost:8080/user/create", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("This is the" +data);
-                if (data) {
-                    navigate("/"); // redirect to login page
-                }
-            })
-            .catch((error) => console.error(error));
+    // Handle form input changes
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevent the default form submission behavior
+        try {
+            await client.models.Users.create({
+                ...formData,
+                isDone: false
+            });
+
+            // Navigate to a success page or login page after creating the user
+            navigate('/login'); // Adjust the path as needed
+        } catch (error) {
+            console.error("Error creating user:", error);
+            // You can also display an error message to the user here
+        }
+    };
 
     return (
         <>
@@ -41,30 +49,83 @@ const SignUp = () => {
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
-                <label>
-                    First Name:
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                    </label>
-                    <br></br><br></br>
-                <label>
-                    Last Name:
-                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    </label>
-                    <br></br><br></br>
-                <label>
-                    Email:
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </label>
-                    <br></br><br></br>
-                <label>
-                    Password:
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </label>
-                    <br></br><br></br>
-                <button type="submit">Submit</button>
-            </form>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label>
+                                        First Name:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        Last Name:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        Email Address:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        Password:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" style={{ textAlign: 'center' }}>
+                                    <button type="submit">Submit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
             </div>
-        </>)
+        </>
+    );
+};
 
-}
 export default SignUp;
