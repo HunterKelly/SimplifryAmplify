@@ -3,6 +3,7 @@ import '../MasterStyles.css';
 import PreLoginNav from "../Navigation/PreLoginNav";
 import React, { useState } from 'react';
 import { generateClient } from 'aws-amplify/data';
+import { DataStore } from '@aws-amplify/datastore';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -27,18 +28,18 @@ const SignUp = () => {
 
     // Handle form submission
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent the default form submission behavior
+        e.preventDefault();
         try {
-            await client.models.Users.create({
-                ...formData,
-                isDone: false
-            });
+            await DataStore.save(
+                new Users({
+                    ...formData,
+                    isDone: false
+                })
+            );
 
-            // Navigate to a success page or login page after creating the user
-            navigate('/login'); // Adjust the path as needed
+            navigate('/login');
         } catch (error) {
             console.error("Error creating user:", error);
-            // You can also display an error message to the user here
         }
     };
 
