@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-simplifry-dev-cfa16-authRole",
+      "UnauthRoleArn": "arn:aws:iam::293161580836:role/amplify-simplifry-dev-cfa16-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::293161580836:role/amplify-simplifry-dev-cfa16-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-simplifry-dev-cfa16-deployment",
+      "UnauthRoleName": "amplify-simplifry-dev-cfa16-unauthRole",
+      "StackName": "amplify-simplifry-dev-cfa16",
+      "StackId": "arn:aws:cloudformation:us-east-1:293161580836:stack/amplify-simplifry-dev-cfa16/83463250-6148-11ef-9bb6-0e9c0d1dad13",
+      "AmplifyAppId": "d1lrv5pky6jyia"
+    },
+    "categories": {
+      "api": {
+        "simplifry": {}
+      }
+    }
+  }
+}
